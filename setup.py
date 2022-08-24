@@ -8,6 +8,7 @@ def run_install(**kwargs):
     extras_require = {
         'datahandler': [
             'pandas',
+            'liac-arff',
         ],
         # 'docs': [
         #     'numpydoc',
