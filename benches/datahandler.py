@@ -28,6 +28,7 @@ class DataHandler:
             lattice=lambda: self._load_cxt_from_fcapy('lattice'),
             tealady=lambda: self._load_cxt_from_fcapy('tealady'),
             myocard=self._load_myocard,
+            bankruptcy=self._load_bankruptcy,
         )
 
         self._raw_url_selector = dict(
@@ -39,6 +40,7 @@ class DataHandler:
             lattice='https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/lattice.cxt',
             tealady='https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/tealady.cxt',
             myocard='https://archive.ics.uci.edu/ml/machine-learning-databases/00579/MI.data',
+            bankruptcy='https://archive.ics.uci.edu/ml/machine-learning-databases/00365/data.zip',
         )
 
     @property
@@ -93,4 +95,38 @@ class DataHandler:
         df.index.name = 'ID'
         df.columns = x_feats+y_feats
         meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_bankruptcy(self, tmp_dname: str = None) -> TYPE_DATA_AND_META:
+        import os
+        from zipfile import ZipFile
+        from io import BytesIO
+        import arff
+
+        data_name = 'bankruptcy'
+        tmp_dname = f'tmp_{data_name}' if not tmp_dname else tmp_dname
+
+        assert not os.path.isdir(tmp_dname), f'Directory {tmp_dname} already exists.' \
+                                             f' Remove this directory or specify another one via `tmp_dname` parameter'
+
+        url = self._raw_url_selector[data_name]
+        data = request.urlopen(url).read()
+        zf = ZipFile(BytesIO(data))
+        zf.extractall(tmp_dname)
+        dfs = []
+        for fname in os.listdir(tmp_dname):
+            data = arff.load(open(f'{tmp_dname}/' + fname, 'r'))
+            os.remove(f'{tmp_dname}/' + fname)
+
+            df = pd.DataFrame(data['data'])
+            dfs.append(df)
+        os.rmdir(tmp_dname)
+        df = pd.concat(dfs)
+        del dfs
+
+        x_feats = [f"X{i+1}" for i in range(df.shape[1]-1)]
+        y_feats = ['is_bankrupted']
+        df.columns = x_feats+y_feats
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+
         return df, meta
