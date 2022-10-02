@@ -9,6 +9,8 @@ def run_install(**kwargs):
         'datahandler': [
             'pandas',
             'liac-arff',
+            'unlzw3',
+            'xlrd',
         ],
         # 'docs': [
         #     'numpydoc',
