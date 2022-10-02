@@ -10,6 +10,7 @@ def run_install(**kwargs):
             'pandas',
             'liac-arff',
             'unlzw3',
+            'xlrd',
         ],
         # 'docs': [
         #     'numpydoc',

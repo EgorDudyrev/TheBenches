@@ -2,7 +2,9 @@
 from dataclasses import dataclass
 from typing import Tuple, Optional, List
 from urllib import request
-from io import StringIO
+from io import StringIO, BytesIO
+from zipfile import ZipFile
+import os
 import re
 
 import pandas as pd
@@ -28,7 +30,8 @@ class DataHandler:
             func_selector[ds_name] = lambda: self._load_cxt_from_fcapy(ds_name)
         for ds_name in [
             'myocard', 'bankruptcy', 'iris', 'wine', 'haberman', 'ecoli', 'breast_w', 'spambase',
-            'waveform', 'parkinsons'
+            'waveform', 'parkinsons', 'statlog', 'gas_sensor', 'avila', 'credit_card', 'shuttle',
+            'sensorless', 'mini', 'workloads',
         ]:
             func_selector[ds_name] = self.__getattribute__(f"_load_{ds_name}")
         self._func_selector = func_selector
@@ -51,6 +54,15 @@ class DataHandler:
             spambase='https://archive.ics.uci.edu/ml/machine-learning-databases/spambase/spambase.data',
             waveform='https://archive.ics.uci.edu/ml/machine-learning-databases/waveform/waveform.data.Z',
             parkinsons='https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data',
+            statlog='https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/satimage/sat.{part_novowel}',
+            gas_sensor='https://archive.ics.uci.edu/ml/machine-learning-databases/00270/driftdataset.zip',
+            avila="https://archive.ics.uci.edu/ml/machine-learning-databases/00459/avila.zip",
+            credit_card='https://archive.ics.uci.edu/ml/machine-learning-databases/00350/'
+                        'default%20of%20credit%20card%20clients.xls',
+            shuttle='https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/shuttle/shuttle.{part_novowel}',
+            sensorless='https://archive.ics.uci.edu/ml/machine-learning-databases/00325/Sensorless_drive_diagnosis.txt',
+            mini='https://archive.ics.uci.edu/ml/machine-learning-databases/00199/MiniBooNE_PID.txt',
+            workloads='https://archive.ics.uci.edu/ml/machine-learning-databases/00493/datasets.zip',
         )
 
     @property
@@ -229,10 +241,69 @@ class DataHandler:
         meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
         return df, meta
 
+    def _load_statlog(self) -> TYPE_DATA_AND_META:
+        data_name = 'statlog'
+
+        pixels = [f"{v}-{h}" for v in ['top', 'middle', 'bottom'] for h in ['left', 'middle', 'right']]
+        x_feats = [f"spectrum_{sp}_{px}" for sp in range(1, 5) for px in pixels]
+        y_feats = ['class']
+        classes = ['red soil', 'cotton crop', 'grey soil', 'damp grey soil', 'soil with vegetation stubble',
+                   'mixture class (all types present)', 'very damp grey soil']
+
+        dfs = []
+        for part, part_novowel in [('train', 'trn'), ('test', 'tst')]:
+            url = self._raw_url_selector[data_name].format(part_novowel=part_novowel)
+            df = pd.read_csv(url, sep=' ', header=None)
+            df.columns = x_feats + y_feats
+            df['class'] = [classes[i - 1] for i in df['class']]
+            df['dataset_part'] = part
+            dfs.append(df)
+        df = pd.concat(dfs).reset_index(drop=True)
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_credit_card(self) -> TYPE_DATA_AND_META:
+        data_name = 'credit_card'
+
+        url = self._raw_url_selector[data_name]
+        df = pd.read_excel(url, header=1).set_index('ID')
+        y_feats = ['default payment next month']
+        x_feats = list(df.drop(y_feats, axis=1).columns)
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_sensorless(self) -> TYPE_DATA_AND_META:
+        data_name = 'sensorless'
+
+        url = self._raw_url_selector[data_name]
+        df = pd.read_csv(url, header=None, sep=' ')
+
+        # Some combination of "The first three intrinsic mode functions (IMF)
+        # of the two phase currents and their residuals (RES) were used and broken down into sub-sequences"
+        base_feats = [f"X{i}" for i in range(1, 13)]
+        x_feats = [f"{op}_{bf}" for op in ['mean', 'std', 'skewness', 'kurtosis'] for bf in base_feats]
+        y_feats = ['class']
+        df.columns = x_feats+y_feats
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_mini(self) -> TYPE_DATA_AND_META:
+        data_name = 'mini'
+
+        url = self._raw_url_selector[data_name]
+        df = pd.read_csv(url, header=None, sep=' ', skipinitialspace=True, skiprows=[0])
+        df['event_type'] = ['signal'] * 36499 + ['background'] * 93565  # Numbers are given at the first line of file
+
+        x_feats = [f"Particle ID {i}" for i in range(1, 51)]
+        y_feats = ['event_type']
+        df = df.rename(columns={i: f for i, f in enumerate(x_feats)})
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
     def _load_bankruptcy(self, tmp_dname: str = None) -> TYPE_DATA_AND_META:
-        import os
-        from zipfile import ZipFile
-        from io import BytesIO
         import arff
 
         data_name = 'bankruptcy'
@@ -253,7 +324,7 @@ class DataHandler:
             df = pd.DataFrame(data['data'])
             dfs.append(df)
         os.rmdir(tmp_dname)
-        df = pd.concat(dfs)
+        df = pd.concat(dfs).reset_index(drop=True)
         del dfs
 
         x_feats = [f"X{i+1}" for i in range(df.shape[1]-1)]
@@ -263,10 +334,100 @@ class DataHandler:
 
         return df, meta
 
+    def _load_gas_sensor(self, tmp_dname: str = None) -> TYPE_DATA_AND_META:
+        data_name = 'gas_sensor'
+        tmp_dname = f'tmp_{data_name}' if not tmp_dname else tmp_dname
+        assert not os.path.isdir(tmp_dname), f'Directory {tmp_dname} already exists.' \
+                                             f' Remove this directory or specify another one via `tmp_dname` parameter'
+
+        base_feats = ['DR_{i}', '|DR|_{i}', 'EMAi0.001_{i}', 'EMAi0.01_{i}', 'EMAi0.1_{i}', 'EMAd0.001_{i}',
+                      'EMAd0.01_{i}', 'EMAd0.1_{i}']
+
+        url = self._raw_url_selector[data_name]
+        data = request.urlopen(url).read()
+        zf = ZipFile(BytesIO(data))
+        zf.extractall(tmp_dname)
+        dfs = []
+        for fname in os.listdir(tmp_dname):
+            df = pd.read_csv(f"{tmp_dname}/{fname}", sep=' ', header=None)
+            df['batch'] = int(fname.replace('batch', '').replace('.dat', ''))
+            os.remove(f"{tmp_dname}/{fname}")
+            dfs.append(df)
+        df = pd.concat(dfs).reset_index(drop=True)
+        del dfs
+        os.rmdir(tmp_dname)
+
+        classes = ['Ethanol', 'Ethylene', 'Ammonia', 'Acetaldehyde', 'Acetone', 'Toluene']
+        df['gas'] = [classes[int(x.split(';')[0]) - 1] for x in df[0]]
+        df['gas_concentration'] = [float(x.split(';')[1]) for x in df[0]]
+        df = df.drop([0, 129], axis=1)
+
+        x_feats = [f.format(i=i) for i in range(1, 17) for f in base_feats]
+        y_feats = ['gas']
+        df = df.rename(columns={i+1: f for i, f in enumerate(x_feats)})
+
+        for f in x_feats:
+            df[f] = [float(x.split(':')[1]) for x in df[f]]
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_avila(self, tmp_dname: str = None) -> TYPE_DATA_AND_META:
+        data_name = 'avila'
+        tmp_dname = f"temp_{data_name}" if tmp_dname is None else tmp_dname
+
+        url = self._raw_url_selector[data_name]
+        data = request.urlopen(url).read()
+        zf = ZipFile(BytesIO(data))
+        zf.extractall(tmp_dname)
+
+        dfs = []
+        for part, part_shrt in [('train', 'tr'), ('test', 'ts')]:
+            fname = f"{tmp_dname}/avila/avila-{part_shrt}.txt"
+            df = pd.read_csv(fname, header=None)
+            os.remove(fname)
+            df['dataset_part'] = part
+            dfs.append(df)
+        df = pd.concat(dfs).reset_index(drop=True)
+        del dfs
+        os.remove(f"{tmp_dname}/avila/avila-description.txt")
+        os.rmdir(f"{tmp_dname}/avila")
+        os.rmdir(tmp_dname)
+
+        x_feats = ['F1: intercolumnar distance', 'F2: upper margin', 'F3: lower margin', 'F4: exploitation',
+                   'F5: row number', 'F6: modular ratio', 'F7: interlinear spacing', 'F8: weight', 'F9: peak number',
+                   'F10: modular ratio/ interlinear spacing']
+        y_feats = ['Class']
+        df = df.rename(columns={i: f for i, f in enumerate(x_feats + y_feats)})
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_workloads(self, tmp_dname: str = None) -> TYPE_DATA_AND_META:
+        data_name = 'workloads'
+        tmp_dname = f"temp_{data_name}" if tmp_dname is None else tmp_dname
+
+        url = self._raw_url_selector[data_name]
+        data = request.urlopen(url).read()
+        zf = ZipFile(BytesIO(data))
+        zf.extractall(tmp_dname)
+
+        df = pd.read_csv(f'{tmp_dname}/Datasets/Range-Queries-Aggregates.csv')
+        for fname in os.listdir(f"{tmp_dname}/Datasets"):
+            os.remove(f"{tmp_dname}/Datasets/{fname}")
+        os.rmdir(f"{tmp_dname}/Datasets")
+        os.rmdir(f'{tmp_dname}')
+
+        df = df.rename(columns={'Unnamed: 0': 'ID'}).set_index('ID')
+
+        x_feats = ['x', 'y', 'x_range', 'y_range', 'count', 'sum_', 'avg']
+        y_feats = None  # Maybe ['count', 'sum_', 'avg'] ?
+
+        meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+
     def _load_waveform(self) -> TYPE_DATA_AND_META:
-        import os
-        from zipfile import ZipFile
-        from io import BytesIO
         import unlzw3
 
         data_name = 'waveform'
@@ -281,4 +442,32 @@ class DataHandler:
         df.columns = x_feats+y_feats
         df.index.name = 'ID'
         meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
+        return df, meta
+
+    def _load_shuttle(self) -> TYPE_DATA_AND_META:
+        import unlzw3
+
+        data_name = 'shuttle'
+        url_template = self._raw_url_selector[data_name]
+
+        url_train = url_template.format(part_novowel='trn.Z')
+        data = request.urlopen(url_train).read()
+        uncompressed_data = unlzw3.unlzw(data)
+        df_train = pd.read_csv(StringIO(uncompressed_data.decode()), header=None, sep=' ')
+        df_train['dataset_part'] = 'train'
+
+        url_test = url_template.format(part_novowel='tst')
+        df_test = pd.read_csv(url_test, header=None, sep=' ')
+        df_test['dataset_part'] = 'test'
+
+        df = pd.concat([df_train, df_test]).reset_index(drop=True)
+
+        classes = ['Rad Flow', 'Fpv Close', 'Fpv Open', 'High', 'Bypass', 'Bpv Close', 'Bpv Open']
+        df[9] = [classes[i - 1] for i in df[9]]
+
+        x_feats = [f'X{i}' for i in range(1, 9)]
+        y_feats = ['class']
+        df = df.rename(columns={i: f for i, f in enumerate(['time'] + x_feats + y_feats)})
+
+        meta = MetaData(name=data_name, url=url_template, x_feats=x_feats, y_feats=y_feats)
         return df, meta
