@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_workloads",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00493/datasets.zip",
+  "x_feats": ["x", "y", "x_range", "y_range", "count", "sum_", "avg"],
+  "y_feats": null
+}

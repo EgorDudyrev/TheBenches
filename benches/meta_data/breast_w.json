@@ -1,0 +1,25 @@
+{
+  "loading_function": "_load_breast_w",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/wdbc.data",
+  "x_feats": [
+    "Mean radius (mean of distances from center to points on the perimeter)",
+    "Mean texture (standard deviation of gray-scale values)", "Mean perimeter", "Mean area",
+    "Mean smoothness (local variation in radius lengths)", "Mean compactness (perimeter^2 / area - 1.0)",
+    "Mean concavity (severity of concave portions of the contour)",
+    "Mean concave points (number of concave portions of the contour)", "Mean symmetry",
+    "Mean fractal dimension ('coastline approximation' - 1)",
+    "SError radius (mean of distances from center to points on the perimeter)",
+    "SError texture (standard deviation of gray-scale values)", "SError perimeter", "SError area",
+    "SError smoothness (local variation in radius lengths)", "SError compactness (perimeter^2 / area - 1.0)",
+    "SError concavity (severity of concave portions of the contour)",
+    "SError concave points (number of concave portions of the contour)", "SError symmetry",
+    "SError fractal dimension ('coastline approximation' - 1)",
+    "Worst radius (mean of distances from center to points on the perimeter)",
+    "Worst texture (standard deviation of gray-scale values)", "Worst perimeter", "Worst area",
+    "Worst smoothness (local variation in radius lengths)", "Worst compactness (perimeter^2 / area - 1.0)",
+    "Worst concavity (severity of concave portions of the contour)",
+    "Worst concave points (number of concave portions of the contour)", "Worst symmetry",
+    "Worst fractal dimension ('coastline approximation' - 1)"
+  ],
+  "y_feats": ["Diagnosis"]
+}

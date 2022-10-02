@@ -1,0 +1,5 @@
+{
+  "loading_function": "_load_csv_from_fcapy",
+  "url": "https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/mango.csv",
+  "x_feats": null
+}

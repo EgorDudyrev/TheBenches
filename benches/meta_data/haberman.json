@@ -1,0 +1,9 @@
+{
+  "loading_function": "_load_haberman",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/haberman/haberman.data",
+  "x_feats": [
+    "Age of patient at time of operation", "Patient's year of operation",
+    "Number of positive axillary nodes detected"
+  ],
+  "y_feats": ["Survival status"]
+}

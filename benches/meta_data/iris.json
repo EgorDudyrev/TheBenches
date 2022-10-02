@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_iris",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data",
+  "x_feats": ["sepal length in cm", "sepal width in cm", "petal length in cm", "petal width in cm"],
+  "y_feats": ["class"]
+}

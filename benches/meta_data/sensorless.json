@@ -1,0 +1,16 @@
+{
+  "loading_function": "_load_sensorless",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00325/Sensorless_drive_diagnosis.txt",
+  "x_feats": [
+    "mean_X1", "mean_X2", "mean_X3", "mean_X4", "mean_X5", "mean_X6",
+    "mean_X7", "mean_X8", "mean_X9", "mean_X10", "mean_X11", "mean_X12",
+    "std_X1", "std_X2", "std_X3", "std_X4", "std_X5", "std_X6",
+    "std_X7", "std_X8", "std_X9", "std_X10", "std_X11", "std_X12",
+    "skewness_X1", "skewness_X2", "skewness_X3", "skewness_X4", "skewness_X5", "skewness_X6",
+    "skewness_X7", "skewness_X8", "skewness_X9", "skewness_X10", "skewness_X11", "skewness_X12",
+    "kurtosis_X1", "kurtosis_X2", "kurtosis_X3", "kurtosis_X4", "kurtosis_X5", "kurtosis_X6",
+    "kurtosis_X7", "kurtosis_X8", "kurtosis_X9", "kurtosis_X10", "kurtosis_X11", "kurtosis_X12"
+  ],
+  "y_feats": ["class"],
+  "comment": "x_feats are some combination of <The first three intrinsic mode functions (IMF) of the two phase currents and their residuals (RES) were used and broken down into sub-sequences>"
+}

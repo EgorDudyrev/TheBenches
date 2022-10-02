@@ -1,0 +1,16 @@
+{
+  "loading_function": "_load_mini",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00199/MiniBooNE_PID.txt",
+  "x_feats": [
+    "Particle ID 1", "Particle ID 2", "Particle ID 3", "Particle ID 4", "Particle ID 5", "Particle ID 6",
+    "Particle ID 7", "Particle ID 8", "Particle ID 9", "Particle ID 10", "Particle ID 11", "Particle ID 12",
+    "Particle ID 13", "Particle ID 14", "Particle ID 15", "Particle ID 16", "Particle ID 17", "Particle ID 18",
+    "Particle ID 19", "Particle ID 20", "Particle ID 21", "Particle ID 22", "Particle ID 23", "Particle ID 24",
+    "Particle ID 25", "Particle ID 26", "Particle ID 27", "Particle ID 28", "Particle ID 29", "Particle ID 30",
+    "Particle ID 31", "Particle ID 32", "Particle ID 33", "Particle ID 34", "Particle ID 35", "Particle ID 36",
+    "Particle ID 37", "Particle ID 38", "Particle ID 39", "Particle ID 40", "Particle ID 41", "Particle ID 42",
+    "Particle ID 43", "Particle ID 44", "Particle ID 45", "Particle ID 46", "Particle ID 47", "Particle ID 48",
+    "Particle ID 49", "Particle ID 50"
+  ],
+  "y_feats": ["event_type"]
+}

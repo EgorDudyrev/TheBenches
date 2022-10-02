@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_bankruptcy",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00365/data.zip",
+  "x_feats": null,
+  "y_feats": ["is_bankrupted"]
+}

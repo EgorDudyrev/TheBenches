@@ -11,6 +11,8 @@ def run_install(**kwargs):
             'liac-arff',
             'unlzw3',
             'xlrd',
+            'pkg_resources',
+            'dataclasses-json'
         ],
         # 'docs': [
         #     'numpydoc',
@@ -39,7 +41,9 @@ def run_install(**kwargs):
             "Operating System :: OS Independent",
         ],
         python_requires='>=3.8',
-        extras_require=extras_require
+        extras_require=extras_require,
+        include_package_data=True,
+        package_data={'': ['meta_data/*.json']},
     )
 
 

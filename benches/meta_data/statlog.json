@@ -1,0 +1,23 @@
+{
+  "loading_function": "_load_statlog",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/statlog/satimage/sat.{part_novowel}",
+  "x_feats": [
+    "spectrum_1_top-left", "spectrum_1_top-middle", "spectrum_1_top-right",
+    "spectrum_1_middle-left", "spectrum_1_middle-middle", "spectrum_1_middle-right",
+    "spectrum_1_bottom-left", "spectrum_1_bottom-middle", "spectrum_1_bottom-right",
+    "spectrum_2_top-left", "spectrum_2_top-middle", "spectrum_2_top-right",
+    "spectrum_2_middle-left", "spectrum_2_middle-middle", "spectrum_2_middle-right",
+    "spectrum_2_bottom-left", "spectrum_2_bottom-middle", "spectrum_2_bottom-right",
+    "spectrum_3_top-left", "spectrum_3_top-middle", "spectrum_3_top-right",
+    "spectrum_3_middle-left", "spectrum_3_middle-middle", "spectrum_3_middle-right",
+    "spectrum_3_bottom-left", "spectrum_3_bottom-middle", "spectrum_3_bottom-right",
+    "spectrum_4_top-left", "spectrum_4_top-middle", "spectrum_4_top-right",
+    "spectrum_4_middle-left", "spectrum_4_middle-middle", "spectrum_4_middle-right",
+    "spectrum_4_bottom-left", "spectrum_4_bottom-middle", "spectrum_4_bottom-right"
+  ],
+  "y_feats": ["class"],
+  "classes": [
+    "red soil", "cotton crop", "grey soil", "damp grey soil", "soil with vegetation stubble", 
+    "mixture class (all types present)", "very damp grey soil"
+  ]
+}
