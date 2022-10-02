@@ -1,15 +1,19 @@
 """This file describes DataHandler class that keeps track of all datasets and where they can be loaded from"""
 from dataclasses import dataclass
-from typing import Tuple, Optional, List
+from dataclasses_json import dataclass_json
+import pkg_resources
+from typing import Tuple, Optional, List, Callable
 from urllib import request
 from io import StringIO, BytesIO
 from zipfile import ZipFile
 import os
 import re
+import json
 
 import pandas as pd
 
 
+@dataclass_json
 @dataclass
 class MetaData:
     name: str
@@ -23,19 +27,6 @@ TYPE_DATA_AND_META = Tuple[pd.DataFrame, MetaData]
 
 class DataHandler:
     def __init__(self):
-        func_selector = {}
-        for ds_name in ['animal_movement', 'mango']:
-            func_selector[ds_name] = lambda: self._load_csv_from_fcapy(ds_name)
-        for ds_name in ['live_in_water', 'digits', 'gewaesser', 'lattice', 'tealady']:
-            func_selector[ds_name] = lambda: self._load_cxt_from_fcapy(ds_name)
-        for ds_name in [
-            'myocard', 'bankruptcy', 'iris', 'wine', 'haberman', 'ecoli', 'breast_w', 'spambase',
-            'waveform', 'parkinsons', 'statlog', 'gas_sensor', 'avila', 'credit_card', 'shuttle',
-            'sensorless', 'mini', 'workloads',
-        ]:
-            func_selector[ds_name] = self.__getattribute__(f"_load_{ds_name}")
-        self._func_selector = func_selector
-
         self._raw_url_selector = dict(
             animal_movement='https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/animal_movement.csv',
             mango='https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/mango.csv',
@@ -67,16 +58,31 @@ class DataHandler:
 
     @property
     def available_datasets(self):
-        return tuple(self._func_selector.keys())
+        return tuple(self._raw_url_selector.keys())
 
     def load_dataset(self, data_name: str) -> TYPE_DATA_AND_META:
-        df, meta = self._func_selector[data_name]()
+        df, meta = self.func_selector(data_name)()
 
         assert len(set(meta.x_feats)) == len(meta.x_feats)
         if meta.y_feats:
             assert len(set(meta.y_feats)) == len(meta.y_feats)
 
         return df, meta
+
+    @staticmethod
+    def load_metadata(data_name: str) -> MetaData:
+        stream = pkg_resources.resource_stream(__name__, f'meta_data/{data_name}.json')
+        dct = json.loads(stream.read())
+        dct['name'] = data_name
+        return MetaData.from_dict(dct)
+
+    def func_selector(self, data_name: str) -> Callable[[], TYPE_DATA_AND_META]:
+        if data_name in {'animal_movement', 'mango'}:
+            return lambda: self._load_csv_from_fcapy(data_name)
+        if data_name in {'live_in_water', 'digits', 'gewaesser', 'lattice', 'tealady'}:
+            return lambda: self._load_cxt_from_fcapy(data_name)
+
+        return self.__getattribute__(f"_load_{data_name}")
 
     def _load_csv_from_fcapy(self, data_name: str) -> TYPE_DATA_AND_META:
         url = self._raw_url_selector[data_name]
@@ -425,7 +431,6 @@ class DataHandler:
 
         meta = MetaData(name=data_name, url=url, x_feats=x_feats, y_feats=y_feats)
         return df, meta
-
 
     def _load_waveform(self) -> TYPE_DATA_AND_META:
         import unlzw3
