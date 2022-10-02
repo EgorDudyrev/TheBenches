@@ -1,0 +1,23 @@
+{
+  "loading_function": "_load_gas_sensor",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00270/driftdataset.zip",
+  "x_feats": [
+    "DR_1", "|DR|_1", "EMAi0.001_1", "EMAi0.01_1", "EMAi0.1_1", "EMAd0.001_1", "EMAd0.01_1", "EMAd0.1_1",
+    "DR_2", "|DR|_2", "EMAi0.001_2", "EMAi0.01_2", "EMAi0.1_2", "EMAd0.001_2", "EMAd0.01_2", "EMAd0.1_2",
+    "DR_3", "|DR|_3", "EMAi0.001_3", "EMAi0.01_3", "EMAi0.1_3", "EMAd0.001_3", "EMAd0.01_3", "EMAd0.1_3",
+    "DR_4", "|DR|_4", "EMAi0.001_4", "EMAi0.01_4", "EMAi0.1_4", "EMAd0.001_4", "EMAd0.01_4", "EMAd0.1_4",
+    "DR_5", "|DR|_5", "EMAi0.001_5", "EMAi0.01_5", "EMAi0.1_5", "EMAd0.001_5", "EMAd0.01_5", "EMAd0.1_5",
+    "DR_6", "|DR|_6", "EMAi0.001_6", "EMAi0.01_6", "EMAi0.1_6", "EMAd0.001_6", "EMAd0.01_6", "EMAd0.1_6",
+    "DR_7", "|DR|_7", "EMAi0.001_7", "EMAi0.01_7", "EMAi0.1_7", "EMAd0.001_7", "EMAd0.01_7", "EMAd0.1_7",
+    "DR_8", "|DR|_8", "EMAi0.001_8", "EMAi0.01_8", "EMAi0.1_8", "EMAd0.001_8", "EMAd0.01_8", "EMAd0.1_8",
+    "DR_9", "|DR|_9", "EMAi0.001_9", "EMAi0.01_9", "EMAi0.1_9", "EMAd0.001_9", "EMAd0.01_9", "EMAd0.1_9",
+    "DR_10", "|DR|_10", "EMAi0.001_10", "EMAi0.01_10", "EMAi0.1_10", "EMAd0.001_10", "EMAd0.01_10", "EMAd0.1_10",
+    "DR_11", "|DR|_11", "EMAi0.001_11", "EMAi0.01_11", "EMAi0.1_11", "EMAd0.001_11", "EMAd0.01_11", "EMAd0.1_11",
+    "DR_12", "|DR|_12", "EMAi0.001_12", "EMAi0.01_12", "EMAi0.1_12", "EMAd0.001_12", "EMAd0.01_12", "EMAd0.1_12",
+    "DR_13", "|DR|_13", "EMAi0.001_13", "EMAi0.01_13", "EMAi0.1_13", "EMAd0.001_13", "EMAd0.01_13", "EMAd0.1_13",
+    "DR_14", "|DR|_14", "EMAi0.001_14", "EMAi0.01_14", "EMAi0.1_14", "EMAd0.001_14", "EMAd0.01_14", "EMAd0.1_14",
+    "DR_15", "|DR|_15", "EMAi0.001_15", "EMAi0.01_15", "EMAi0.1_15", "EMAd0.001_15", "EMAd0.01_15", "EMAd0.1_15",
+    "DR_16", "|DR|_16", "EMAi0.001_16", "EMAi0.01_16", "EMAi0.1_16", "EMAd0.001_16", "EMAd0.01_16", "EMAd0.1_16"
+  ],
+  "y_feats": ["gas"]
+}

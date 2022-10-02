@@ -1,0 +1,5 @@
+{
+  "loading_function": "_load_cxt_from_fcapy",
+  "url": "https://raw.githubusercontent.com/EgorDudyrev/FCApy/main/data/digits.cxt",
+  "x_feats": null
+}

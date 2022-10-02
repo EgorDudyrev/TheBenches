@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_credit_card",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00350/default%20of%20credit%20card%20clients.xls",
+  "x_feats": null,
+  "y_feats": ["default payment next month"]
+}

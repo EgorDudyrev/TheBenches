@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_ecoli",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/ecoli/ecoli.data",
+  "x_feats": ["Sequence Name", "mcg", "gvh", "lip", "chg", "aac", "alm1", "alm2"],
+  "y_feats": ["Class"]
+}

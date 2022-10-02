@@ -1,0 +1,10 @@
+{
+  "loading_function": "_load_avila",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/00459/avila.zip",
+  "x_feats": [
+    "F1: intercolumnar distance", "F2: upper margin", "F3: lower margin", "F4: exploitation", "F5: row number",
+    "F6: modular ratio", "F7: interlinear spacing", "F8: weight", "F9: peak number",
+    "F10: modular ratio/ interlinear spacing"
+  ],
+  "y_feats": ["Class"]
+}

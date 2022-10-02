@@ -1,0 +1,6 @@
+{
+  "loading_function": "_load_parkinsons",
+  "url": "https://archive.ics.uci.edu/ml/machine-learning-databases/parkinsons/parkinsons.data",
+  "x_feats": null,
+  "y_feats": ["status"]
+}
