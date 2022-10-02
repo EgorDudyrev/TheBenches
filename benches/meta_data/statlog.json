@@ -15,5 +15,9 @@
     "spectrum_4_middle-left", "spectrum_4_middle-middle", "spectrum_4_middle-right",
     "spectrum_4_bottom-left", "spectrum_4_bottom-middle", "spectrum_4_bottom-right"
   ],
-  "y_feats": ["class"]
+  "y_feats": ["class"],
+  "classes": [
+    "red soil", "cotton crop", "grey soil", "damp grey soil", "soil with vegetation stubble", 
+    "mixture class (all types present)", "very damp grey soil"
+  ]
 }

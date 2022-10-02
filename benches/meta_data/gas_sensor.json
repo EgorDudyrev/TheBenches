@@ -19,5 +19,6 @@
     "DR_15", "|DR|_15", "EMAi0.001_15", "EMAi0.01_15", "EMAi0.1_15", "EMAd0.001_15", "EMAd0.01_15", "EMAd0.1_15",
     "DR_16", "|DR|_16", "EMAi0.001_16", "EMAi0.01_16", "EMAi0.1_16", "EMAd0.001_16", "EMAd0.01_16", "EMAd0.1_16"
   ],
-  "y_feats": ["gas"]
+  "y_feats": ["gas"],
+  "classes": ["Ethanol", "Ethylene", "Ammonia", "Acetaldehyde", "Acetone", "Toluene"]
 }

@@ -11,5 +11,6 @@
     "kurtosis_X1", "kurtosis_X2", "kurtosis_X3", "kurtosis_X4", "kurtosis_X5", "kurtosis_X6",
     "kurtosis_X7", "kurtosis_X8", "kurtosis_X9", "kurtosis_X10", "kurtosis_X11", "kurtosis_X12"
   ],
-  "y_feats": ["class"]
+  "y_feats": ["class"],
+  "comment": "x_feats are some combination of <The first three intrinsic mode functions (IMF) of the two phase currents and their residuals (RES) were used and broken down into sub-sequences>"
 }
